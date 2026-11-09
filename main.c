@@ -8,8 +8,6 @@ typedef struct {
   size_t quantity;
 } Article;
 
-Article createNew(char name[], char position[], float price, size_t quantity);
-
 int main(void) {
   Article article1 = {"Article 1", "AAA", 10.0, 50};
   Article article2 = {"Article 2", "AAB", 15.99, 20};
