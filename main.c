@@ -21,7 +21,7 @@ bool canBuyItem(Buyer *buyer, size_t quantity, Article *article);
 void printBuyerInv(Buyer *buyer);
 
 int main(void) {
-  Buyer myself = {100.00f, 0, {}, "Craz"};
+  Buyer myself = {100.00f, 0,{NULL}, "Craz"};
   Article article1 = {"Article 1", "AAA", 1.0, 50};
   Article article2 = {"Article 2", "AAB", 15.99, 20};
   Article article3 = {"Article 3", "AAC", 2.99, 7};
@@ -75,8 +75,11 @@ void buyItem(Buyer *buyer, Article *article, size_t quantity) {
   article->quantity -= quantity;
 
   for (size_t i = buyer->nb_item; i < buyer->nb_item + quantity; i++) {
-    buyer->inventory[i] = article;
-    buyer->inventory[i]->quantity = 1;
+
+	strncpy(buyer->inventory[i]->name, article->name, 100);
+	strncpy(buyer->inventory[i]->position, article->position, 4);
+	buyer->inventory[i]->price = article->price;
+	buyer->inventory[i]->quantity = 1;
   }
 
   buyer->nb_item += quantity;
