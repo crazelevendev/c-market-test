@@ -10,3 +10,4 @@ debug: main.c
 .PHONY: clean
 clean:
 	rm build/main -f
+	rm debug debug.exe -f
