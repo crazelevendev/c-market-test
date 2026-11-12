@@ -118,8 +118,7 @@ void sellItem(Buyer *buyer, const size_t position) {
     return;
   }
   buyer->wallet += (buyer->inventory[position].price * RESELL_RATIO);
-  for (size_t i = position; i < buyer->nb_item; i++) {
-    if (i == (INVENTORY_SIZE - 1)) continue;
+  for (size_t i = position; i < (buyer->nb_item - 1); i++) {
     buyer->inventory[i] = buyer->inventory[i + 1];
   }
   (buyer->nb_item)--;
