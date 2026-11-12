@@ -7,6 +7,7 @@
 #define POSITION_SIZE 4 // here we choose 4 because of the null terminator \0
 #define INVENTORY_SIZE 10
 #define USERNAME_SIZE 100
+#define RESELL_RATIO 0.8
 
 typedef struct {
   char name[ARTICLE_NAME_SIZE];
@@ -25,6 +26,9 @@ typedef struct {
 void printBuyerInv(const Buyer *buyer);
 bool canBuyItem(const Buyer *buyer, const size_t quantity, const Article *article);
 void buyItem(Buyer *buyer, const size_t quantity, Article *article);
+void sellItem(Buyer *buyer, size_t position); // executive decision :
+// selling an item does not put it back in the Articles; its consummed.
+bool canSellItem(Buyer *buyer, size_t position);
 
 int main(void) {
   Buyer myself = {.wallet = 100.00f, .nb_item = 0, .name = "Craz"};
@@ -41,6 +45,8 @@ int main(void) {
   buyItem(&myself, 8, &article1);
   printBuyerInv(&myself);
   printf("Article 1 has %zu articles left\n", article1.quantity);
+  sellItem(&myself, 0);
+  printBuyerInv(&myself);
 }
 
 bool canBuyItem(const Buyer *buyer, const size_t quantity, const Article *article) {
@@ -88,4 +94,32 @@ void printBuyerInv(const Buyer *buyer) {
            buyer->name, buyer->inventory[i].quantity,
            buyer->inventory[i].name);
   }
+}
+
+// position for selling is index starting from 0
+bool canSellItem(Buyer *buyer, size_t position) {
+  if (buyer->nb_item == 0) {
+    printf("You have no item to sell");
+    return false;
+  }
+  else if (position > (INVENTORY_SIZE - 1)) {
+    printf("You only have %d inventory slot, please choose an inventory number between 0 and %d", INVENTORY_SIZE, (INVENTORY_SIZE - 1));
+    return false;
+  }
+  else if (position > (buyer->nb_item - 1)) {
+    printf("You only have %zu items, please choose a number between 1 and %zu", buyer->nb_item, (buyer->nb_item));
+    return false;
+  }
+  return true;
+}
+
+void sellItem(Buyer *buyer, size_t position) {
+  if (!canSellItem(buyer, position)) {
+    return;
+  }
+  buyer->wallet += (buyer->inventory[position].price * RESELL_RATIO);
+  for (size_t i = position; i < buyer->nb_item; i++) {
+    buyer->inventory[i] = buyer->inventory[i + 1];
+  }
+  (buyer->nb_item)--;
 }
