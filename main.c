@@ -2,9 +2,27 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "article.h"
-#include "buyer.h"
 
+#define ARTICLE_NAME_SIZE 100
+#define POSITION_SIZE 4 // here we choose 4 because of the null terminator \0
+#define INVENTORY_SIZE 10
+#define USERNAME_SIZE 100
+
+typedef struct {
+  char name[ARTICLE_NAME_SIZE];
+  char position[POSITION_SIZE];
+  float price;
+  size_t quantity;
+} Article;
+
+typedef struct {
+  float wallet;
+  size_t nb_item;
+  Article inventory[INVENTORY_SIZE];
+  char name[USERNAME_SIZE];
+} Buyer;
+
+void printBuyerInv(const Buyer *buyer);
 bool canBuyItem(const Buyer *buyer, const size_t quantity, const Article *article);
 void buyItem(Buyer *buyer, const size_t quantity, Article *article);
 
@@ -62,4 +80,12 @@ void buyItem(Buyer *buyer, const size_t quantity, Article *article) {
 
   buyer->nb_item += quantity;
   buyer->wallet -= article->price * quantity;
+}
+
+void printBuyerInv(const Buyer *buyer) {
+  for (size_t i = 0; i < buyer->nb_item; i++) {
+    printf("Slot %zu of %s's inventory is filled with %zu \"%s\"\n", i,
+           buyer->name, buyer->inventory[i].quantity,
+           buyer->inventory[i].name);
+  }
 }
