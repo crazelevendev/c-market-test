@@ -3,15 +3,15 @@
 #include <string.h>
 
 #define ARTICLE_NAME_SIZE 100
-#define POSITION_SIZE 4
+#define POSITION_SIZE 4 // here we choose 4 because of the null terminator \0
 #define INVENTORY_SIZE 10
 #define USERNAME_SIZE 100
 #define ARTICLE_SIZE 120
-#define BUYER_SIZE 200
+#define BUYER_SIZE 1320
 
 typedef struct {
   char name[ARTICLE_NAME_SIZE];
-  char position[POSITION_SIZE]; // here we choose 4 because of the null terminator \0
+  char position[POSITION_SIZE];
   float price;
   size_t quantity;
 } Article;
@@ -19,7 +19,7 @@ typedef struct {
 typedef struct {
   float wallet;
   size_t nb_item;
-  Article *inventory[INVENTORY_SIZE];
+  Article inventory[INVENTORY_SIZE];
   char name[USERNAME_SIZE];
 } Buyer;
 
@@ -28,6 +28,8 @@ bool canBuyItem(Buyer *buyer, size_t quantity, Article *article);
 void printBuyerInv(Buyer *buyer);
 
 int main(void) {
+	printf("Size of article %zu\n", sizeof(Article));
+	printf("Size of buyer %zu\n", sizeof(Buyer));
   Buyer myself = {100.00f, 0,{}, "Craz"};
   Article article1 = {"Article 1", "AAA", 1.0f, 50};
   Article article2 = {"Article 2", "AAB", 15.99f, 20};
@@ -46,8 +48,8 @@ int main(void) {
 void printBuyerInv(Buyer *buyer) {
   for (size_t i = 0; i < buyer->nb_item; i++) {
     printf("Slot %zu of %s's inventory is filled with %zu \"%s\"\n", i,
-           buyer->name, buyer->inventory[i]->quantity,
-           buyer->inventory[i]->name);
+           buyer->name, buyer->inventory[i].quantity,
+           buyer->inventory[i].name);
   }
 }
 
@@ -82,11 +84,8 @@ void buyItem(Buyer *buyer, Article *article, size_t quantity) {
   article->quantity -= quantity;
 
   for (size_t i = buyer->nb_item; i < buyer->nb_item + quantity; i++) {
-	memcpy(buyer->inventory[i], article, ARTICLE_SIZE);
-//	strncpy(buyer->inventory[i]->name, article->name, 100);
-//	strncpy(buyer->inventory[i]->position, article->position, 4);
-//	buyer->inventory[i]->price = article->price;
-	buyer->inventory[i]->quantity = 1;
+	memcpy(&buyer->inventory[i], article, ARTICLE_SIZE);
+	buyer->inventory[i].quantity = 1;
   }
 
   buyer->nb_item += quantity;
