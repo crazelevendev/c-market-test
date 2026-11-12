@@ -107,7 +107,7 @@ bool canSellItem(const Buyer *buyer, const size_t position) {
     return false;
   }
   else if (position > (buyer->nb_item - 1)) {
-    printf("You only have %zu items, please choose a number between 0 and %zu\n", buyer->nb_item, (buyer->nb_item));
+    printf("You only have %zu items, please choose a number between 0 and %zu\n", buyer->nb_item, (buyer->nb_item - 1));
     return false;
   }
   return true;
