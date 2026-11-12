@@ -20,9 +20,9 @@ typedef struct {
   char name[USERNAME_SIZE];
 } Buyer;
 
-void buyItem(Buyer *buyer, Article *article, size_t quantity);
-bool canBuyItem(Buyer *buyer, size_t quantity, Article *article);
-void printBuyerInv(Buyer *buyer);
+void buyItem(Buyer *buyer, const size_t quantity, Article *article);
+bool canBuyItem(const Buyer *buyer, const size_t quantity, const Article *article);
+void printBuyerInv(const Buyer *buyer);
 
 int main(void) {
   Buyer myself = {.wallet = 100.00f, .nb_item = 0, .name = "Craz"};
@@ -33,15 +33,15 @@ int main(void) {
          article1.quantity, article1.name, article1.position, article1.price);
   printf("We have %zu %s at position %s, the price for one unit is %.2f$\n",
          article2.quantity, article2.name, article2.position, article2.price);
-  buyItem(&myself, &article2, 1);
-  buyItem(&myself, &article3, 1);
+  buyItem(&myself, 1, &article2);
+  buyItem(&myself, 1, &article3);
   printBuyerInv(&myself);
-  buyItem(&myself, &article1, 8);
+  buyItem(&myself, 8, &article1);
   printBuyerInv(&myself);
-  printf("Article 1 has %zu articles left", article1.quantity);
+  printf("Article 1 has %zu articles left\n", article1.quantity);
 }
 
-void printBuyerInv(Buyer *buyer) {
+void printBuyerInv(const Buyer *buyer) {
   for (size_t i = 0; i < buyer->nb_item; i++) {
     printf("Slot %zu of %s's inventory is filled with %zu \"%s\"\n", i,
            buyer->name, buyer->inventory[i].quantity,
@@ -49,7 +49,7 @@ void printBuyerInv(Buyer *buyer) {
   }
 }
 
-bool canBuyItem(Buyer *buyer, size_t quantity, Article *article) {
+bool canBuyItem(const Buyer *buyer, const size_t quantity, const Article *article) {
   if (buyer->nb_item >= INVENTORY_SIZE) {
     printf("Your inventory is full\n"); // tested
     return false;
@@ -73,7 +73,7 @@ bool canBuyItem(Buyer *buyer, size_t quantity, Article *article) {
   return true;
 }
 
-void buyItem(Buyer *buyer, Article *article, size_t quantity) {
+void buyItem(Buyer *buyer, const size_t quantity, Article *article) {
   if (!canBuyItem(buyer, quantity, article)) {
     return;
   }
