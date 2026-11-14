@@ -1,0 +1,12 @@
+Besoin fonctionnel
+
+Le programme manipule un tableau d’entiers. Il doit pouvoir :
+
+Transformer chaque élément du tableau avec une opération au choix (par exemple : doubler, mettre au carré).
+Sélectionner les éléments qui respectent une condition au choix (par exemple : pairs, positifs), et donner leur nombre.
+
+Contrainte : l’opération, la condition et l’ordre de tri sont des paramètres. Une seule fonction de transformation,
+une seule fonction de sélection et une seule fonction de tri doivent suffire pour tous les cas.
+
+void transform(tableau, operation)
+void select(source, dest, condition)
